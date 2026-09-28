@@ -1,6 +1,8 @@
 {
   "status": "DISPATCHED_TO_QUEUE",
-  "timestamp": "2026-09-29T00:17:50.670421",
+  "timestamp": "2026-09-29T00:48:40.000000",
+  "live_website_url": "https://samya666.github.io/mothers-hut-redesign/",
+  "github_repository": "https://github.com/samya666/mothers-hut-redesign",
   "recipient": {
     "entity": "Mother's Hut (Garai Brothers / Partnership Firm)",
     "founders": [
@@ -15,7 +17,8 @@
   "subject": "Proposal & Strategic Growth Pitch: Mother's Hut Digital Redesign & Highway Expansion Memo",
   "delivery_channel": "Direct Founder Outreach & Digital Concierge Intake",
   "attachments": [
-    "Mother's Hut 2.5K Walkthrough Experience (http://localhost:8080)",
+    "Public Live Deployment: https://samya666.github.io/mothers-hut-redesign/",
+    "GitHub Source: https://github.com/samya666/mothers-hut-redesign",
     "Ananya AI Digital Concierge System",
     "Mother's Hut Investment & Commercial Expansion Pitch"
   ]
