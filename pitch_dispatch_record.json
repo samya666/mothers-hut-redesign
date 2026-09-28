@@ -1,0 +1,22 @@
+{
+  "status": "DISPATCHED_TO_QUEUE",
+  "timestamp": "2026-09-29T00:17:50.670421",
+  "recipient": {
+    "entity": "Mother's Hut (Garai Brothers / Partnership Firm)",
+    "founders": [
+      "Anath Bandhu Garai",
+      "Kajori Garai",
+      "Arindam Garai"
+    ],
+    "primary_email": "care.mothershut@gmail.com",
+    "primary_phone": "+91 9002525999",
+    "address": "NH-12 (NH-34), Beside Garai Brothers IOCL Pump, Bhatjangla, Krishnanagar, Nadia, West Bengal 741102"
+  },
+  "subject": "Proposal & Strategic Growth Pitch: Mother's Hut Digital Redesign & Highway Expansion Memo",
+  "delivery_channel": "Direct Founder Outreach & Digital Concierge Intake",
+  "attachments": [
+    "Mother's Hut 2.5K Walkthrough Experience (http://localhost:8080)",
+    "Ananya AI Digital Concierge System",
+    "Mother's Hut Investment & Commercial Expansion Pitch"
+  ]
+}

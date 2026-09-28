@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mother's Hut | 100% Women-Powered Gastronomic Landmark | NH-12 Krishnanagar</title>
+  <meta name="description" content="NH-12 Krishnanagar's 50,000 sq.ft culinary pride. A 100% women-run gastronomic universe with 150+ mothers, authentic heritage recipes, 10 themed dining zones, and autonomous robot service.">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Samarkan Font Definition & Film Strip Styles -->
+  <style>
+    @font-face {
+      font-family: 'Samarkan';
+      src: url('assets/fonts/samarkan.woff') format('woff'),
+           url('https://fonts.cdnfonts.com/s/5790/SAMARN__.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --gildas-olive: #343825;
+      --gildas-moss: #222518;
+      --gildas-cream: #F5EFEB;
+      --gildas-sand: #ECE5CE;
+      --gildas-ochre: #B85D2A;
+      --gildas-rust: #8C3B1B;
+      --gildas-charcoal: #171813;
+      --gildas-linen: #FAF8F5;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--gildas-linen);
+      color: #262420;
+    }
+
+    .font-samarkan {
+      font-family: 'Samarkan', 'Playfair Display', serif;
+      letter-spacing: 0.04em;
+    }
+
+    .font-editorial {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Ananya AI Styled Pill Buttons */
+    .ananya-pill-btn {
+      background: rgba(34, 37, 24, 0.95);
+      backdrop-filter: blur(14px);
+      border: 2px solid #B85D2A;
+      border-radius: 9999px;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(184, 93, 42, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ananya-pill-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      border-color: #F59E0B;
+      box-shadow: 0 20px 40px -5px rgba(184, 93, 42, 0.4), 0 0 25px rgba(245, 158, 11, 0.35);
+    }
+
+    /* Film Strip Marquee Animation */
+    @keyframes filmStripScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .film-strip-track {
+      display: flex;
+      width: max-content;
+      animation: filmStripScroll 42s linear infinite;
+    }
+
+    .film-strip-track:hover {
+      animation-play-state: paused !important;
+    }
+
+    .film-strip-reverse {
+      animation-direction: reverse;
+      animation-duration: 48s;
+    }
+
+    /* Film Sprocket Perforation Graphic */
+    .film-sprocket-border {
+      background-image: repeating-linear-gradient(
+        90deg,
+        #4A4E38 0px,
+        #4A4E38 12px,
+        transparent 12px,
+        transparent 22px
+      );
+      height: 8px;
+      opacity: 0.65;
+    }
+
+    /* Hero stage name transitions */
+    .hero-name-stage {
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    /* Custom Leaflet Map Pin */
+    .leaflet-popup-content-wrapper {
+      background: #222518;
+      color: #F5EFEB;
+      border-radius: 14px;
+      padding: 6px;
+      border: 1px solid rgba(184, 93, 42, 0.4);
+    }
+    .leaflet-popup-tip { background: #222518; }
+  </style>
+</head>
+<body class="antialiased pb-24 md:pb-0 selection:bg-amber-200 selection:text-stone-900">
+
+  <!-- MINIMAL HEADER: LOGO, MOTHER'S HUT NAME & ADDRESS ONLY -->
+  <header class="absolute top-6 left-0 right-0 z-40 flex items-center justify-center pointer-events-none px-4">
+    <div class="flex items-center gap-3 text-center pointer-events-auto bg-black/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/10 shadow-lg">
+      <img src="assets/logo.png" alt="Mother's Hut Logo" class="h-10 sm:h-12 w-auto object-contain filter drop-shadow">
+      <div class="text-left">
+        <a href="#" class="font-samarkan text-2xl sm:text-3xl text-amber-200 tracking-wide block leading-none hover:text-white transition">
+          Mother's Hut
+        </a>
+        <span class="text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-[#ECE5CE]/85 block mt-1 font-mono">
+          Krishnanagar • Nadia • NH-12
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. 🌟 CLEAN HERO SECTION: UPSCALED 2.5K WALKTHROUGH + ONLY THE 5 NAMES (NO CLUTTER) -->
+  <section id="hero-scroll-track" class="relative bg-black text-white select-none">
+    
+    <!-- Scroll Runway for Video Scrubbing (360vh) -->
+    <div id="scroll-track-runway" class="relative w-full h-[360vh]">
+      
+      <!-- Sticky Fullscreen Viewport -->
+      <div id="scroll-track-viewport" class="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-black">
+        
+        <!-- Studio Upscaled 2.5K Walkthrough Video (Unsharp Sharpened & Clean) -->
+        <video id="trackVideo" 
+               src="assets/locations/walkthrough/hero_walkthrough_upscaled.mp4" 
+               muted 
+               playsinline 
+               preload="auto" 
+               poster="assets/authentic_basudha_hall.jpg"
+               class="absolute inset-0 w-full h-full object-cover z-0 filter contrast-[1.05] brightness-95 will-change-transform"></video>
+
+        <!-- Pure Typography Layer: ONLY THE 5 NAMES IN SAMARKAN FONT (No extra text, no badges, no overlays) -->
+        <div class="relative z-20 w-full px-6 h-36 sm:h-48 md:h-60 flex items-center justify-center pointer-events-none text-center">
+          
+          <!-- NAME 1: Mother's Hut -->
+          <div id="name-stage-1" class="hero-name-stage absolute inset-0 flex items-center justify-center transition-all duration-700">
+            <h1 class="font-samarkan text-6xl sm:text-8xl md:text-9xl text-amber-200 drop-shadow-[0_12px_36px_rgba(0,0,0,0.92)] tracking-wide">
+              Mother's Hut
+            </h1>
+          </div>
+
+          <!-- NAME 2: Chowringhee -->
+          <div id="name-stage-2" class="hero-name-stage absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700" style="visibility: hidden; transform: translate3d(0, 30px, 0) scale(0.95);">
+            <h2 class="font-samarkan text-6xl sm:text-8xl md:text-9xl text-amber-200 drop-shadow-[0_12px_36px_rgba(0,0,0,0.92)] tracking-wide">
+              Chowringhee
+            </h2>
+          </div>
+
+          <!-- NAME 3: Basudha -->
+          <div id="name-stage-3" class="hero-name-stage absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700" style="visibility: hidden; transform: translate3d(0, 30px, 0) scale(0.95);">
+            <h2 class="font-samarkan text-6xl sm:text-8xl md:text-9xl text-amber-200 drop-shadow-[0_12px_36px_rgba(0,0,0,0.92)] tracking-wide">
+              Basudha
+            </h2>
+          </div>
+
+          <!-- NAME 4: Hut of the World -->
+          <div id="name-stage-4" class="hero-name-stage absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700" style="visibility: hidden; transform: translate3d(0, 30px, 0) scale(0.95);">
+            <h2 class="font-samarkan text-6xl sm:text-8xl md:text-9xl text-amber-200 drop-shadow-[0_12px_36px_rgba(0,0,0,0.92)] tracking-wide">
+              Hut of the World
+            </h2>
+          </div>
+
+          <!-- NAME 5: Pargola -->
+          <div id="name-stage-5" class="hero-name-stage absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700" style="visibility: hidden; transform: translate3d(0, 30px, 0) scale(0.95);">
+            <h2 class="font-samarkan text-6xl sm:text-8xl md:text-9xl text-amber-200 drop-shadow-[0_12px_36px_rgba(0,0,0,0.92)] tracking-wide">
+              Pargola
+            </h2>
+          </div>
+
+        </div>
+
+        <!-- 4. 🎛️ CONTROLS BAR: AUTOPLAY BUTTON + 4 BUTTONS IN EXACT ANANYA AI STYLE -->
+        <div class="absolute bottom-6 sm:bottom-8 left-4 right-4 max-w-6xl mx-auto z-30 pointer-events-auto">
+          <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            
+            <!-- AUTOPLAY TOGGLE BUTTON -->
+            <button id="autoplay-toggle-btn" onclick="toggleWalkthroughAutoplay()" class="ananya-pill-btn px-4 py-3 flex items-center gap-2.5 cursor-pointer">
+              <span class="relative flex h-3 w-3">
+                <span id="autoplay-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span id="autoplay-dot" class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <i id="autoplay-icon" class="bi bi-play-fill text-emerald-400 text-lg"></i>
+              <span id="autoplay-label" class="text-xs font-mono font-bold tracking-wider text-emerald-200 uppercase">Autoplay Walkthrough</span>
+            </button>
+
+            <!-- BUTTON 1: FULL MENU (Exact Ananya AI Style) -->
+            <a href="javascript:void(0)" onclick="openMenuModal()" class="ananya-pill-btn px-4 sm:px-5 py-3 flex items-center gap-3 cursor-pointer group">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+              </span>
+              <i class="bi bi-book-half text-rose-400 text-base"></i>
+              <div class="text-left">
+                <span class="font-samarkan text-base sm:text-lg text-amber-200 group-hover:text-white transition-colors block leading-none">Full Menu</span>
+                <span class="text-[9px] font-mono text-stone-300 uppercase tracking-widest block mt-0.5">Order Online</span>
+              </div>
+            </a>
+
+            <!-- BUTTON 2: JOIN WAITLIST (Exact Ananya AI Style) -->
+            <a href="javascript:void(0)" onclick="openWaitlistModal()" class="ananya-pill-btn px-4 sm:px-5 py-3 flex items-center gap-3 cursor-pointer group">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+              </span>
+              <i class="bi bi-ticket-perforated-fill text-amber-400 text-base"></i>
+              <div class="text-left">
+                <span class="font-samarkan text-base sm:text-lg text-amber-200 group-hover:text-white transition-colors block leading-none">Join Waitlist</span>
+                <span class="text-[9px] font-mono text-stone-300 uppercase tracking-widest block mt-0.5">Get a Token</span>
+              </div>
+            </a>
+
+            <!-- BUTTON 3: BANQUET (Exact Ananya AI Style) -->
+            <a href="#facilities" class="ananya-pill-btn px-4 sm:px-5 py-3 flex items-center gap-3 cursor-pointer group">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <i class="bi bi-balloon-fill text-emerald-400 text-base"></i>
+              <div class="text-left">
+                <span class="font-samarkan text-base sm:text-lg text-amber-200 group-hover:text-white transition-colors block leading-none">Banquet</span>
+                <span class="text-[9px] font-mono text-stone-300 uppercase tracking-widest block mt-0.5">Book Hall</span>
+              </div>
+            </a>
+
+            <!-- BUTTON 4: BOOK EVENTS (Exact Ananya AI Style) -->
+            <a href="javascript:void(0)" onclick="openEventsModal()" class="ananya-pill-btn px-4 sm:px-5 py-3 flex items-center gap-3 cursor-pointer group">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+              </span>
+              <i class="bi bi-ticket-detailed-fill text-cyan-400 text-base"></i>
+              <div class="text-left">
+                <span class="font-samarkan text-base sm:text-lg text-amber-200 group-hover:text-white transition-colors block leading-none">Book Events</span>
+                <span class="text-[9px] font-mono text-stone-300 uppercase tracking-widest block mt-0.5">Official Shows</span>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 📜 GILDAS-STYLE EDITORIAL STORYTELLING SECTION -->
+  <section id="story" class="py-20 max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="border-t border-stone-200 pt-16">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Left Editorial Quote Column -->
+        <div class="lg:col-span-5">
+          <span class="text-[#B85D2A] text-xs font-bold uppercase tracking-[0.2em] block mb-2 font-mono">Our Culinary Heritage</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 leading-tight">
+            A Roadside Sanctuary with Bengali Spirit
+          </h2>
+          <p class="font-editorial italic text-stone-600 text-lg sm:text-xl mt-4 leading-relaxed">
+            "Every dish carries the unconditional warmth of a mother’s touch, simmered with hand-pounded spices on slow flame."
+          </p>
+          <div class="mt-8 pt-6 border-t border-stone-200 grid grid-cols-2 gap-4">
+            <div>
+              <span class="font-samarkan text-3xl text-[#B85D2A] block">150+</span>
+              <span class="text-xs font-medium text-stone-600 uppercase tracking-wider">Local Mothers Employed</span>
+            </div>
+            <div>
+              <span class="font-samarkan text-3xl text-[#B85D2A] block">50,000</span>
+              <span class="text-xs font-medium text-stone-600 uppercase tracking-wider">Sq. Ft. Campus Area</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Narrative & Media Column -->
+        <div class="lg:col-span-7 space-y-6 text-stone-700 text-sm sm:text-base font-light leading-relaxed">
+          <p>
+            Established along National Highway 12 in Krishnanagar, Mother’s Hut is Bengal’s premier highway gastronomic destination. Founded on a revolutionary philosophy: empowering local mothers to cook generational recipes in a state-of-the-art facility without compromising on handmade authenticity.
+          </p>
+          <p>
+            Here, you choose the tempo of your journey. Settle into the sepia calm of our 1920s Chowringhee colonial hall for artisanal sweets and Darjeeling chai, immerse in the terracotta warmth of Basudha, or relax under the open skies in Bagicha. Hot, fragrant delicacies are prepared fresh and brought directly to your table — often escorted by Nadia’s first autonomous AI server robot.
+          </p>
+          <div class="pt-4 flex items-center gap-4">
+            <a href="#zones" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#B85D2A] hover:text-[#8C3B1B] underline underline-offset-4 transition">
+              <span>Explore The 10 Themed Zones</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. 🎞️ "10 THEMED DINING WORLDS" FILM STRIP CAROUSEL (HOVER TO PAUSE & PLAY REEL/SLIDESHOW) -->
+  <section id="zones" class="py-16 bg-[#1C1E14] text-white border-y border-[#343825] overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 mb-8 flex flex-col md:flex-row md:items-end justify-between">
+      <div>
+        <span class="text-[#B85D2A] text-xs font-bold uppercase tracking-[0.2em] font-mono">Cinematic Film Strip Tour</span>
+        <h3 class="font-samarkan text-3xl sm:text-5xl text-amber-200 mt-1">10 Themed Dining Worlds</h3>
+      </div>
+      <p class="text-stone-400 text-xs sm:text-sm max-w-md mt-2 md:mt-0 font-light flex items-center gap-2">
+        <i class="bi bi-film text-amber-400"></i>
+        <span>Hover over any box to <strong>pause the strip</strong> and <strong>play live video reel</strong>.</span>
+      </p>
+    </div>
+
+    <!-- Top Film Sprocket Border -->
+    <div class="film-sprocket-border mb-4"></div>
+
+    <!-- Continuous Scrolling Film Strip Carousel Container -->
+    <div class="relative w-full overflow-hidden py-4">
+      <div class="film-strip-track flex gap-6 items-center">
+        
+        <!-- CARD 1: Basudha -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_basudha_upscaled.webp" alt="Basudha Hall" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163605.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Reel Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 01</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Basudha Heritage</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Terracotta murals, thatched canopies, mustard floors, and wood-fired curries.</p>
+          </div>
+        </div>
+
+        <!-- CARD 2: Chowringhee -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_chowringhee_upscaled.webp" alt="Chowringhee Hall" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163512.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Reel Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 02</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Chowringhee 1920s</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Geometric black-and-white tessellated tiles, framed sepia archives, and Victorian arched glass.</p>
+          </div>
+        </div>
+
+        <!-- CARD 3: Hut of the World -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_heart_of_the_world_upscaled.webp" alt="Hut of the World" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163413.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Reel Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 03</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Hut of the World</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Curved paisley acoustic booths, suspended basket chandeliers, and 500+ guest grand banquet.</p>
+          </div>
+        </div>
+
+        <!-- CARD 4: Bagicha -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_bagicha_upscaled.webp" alt="Bagicha Garden" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/mothers_hut_real_motion_reel.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Reel Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 04</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Bagicha Garden Deck</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Open-air tropical garden dining with twilight fairy lanterns and refreshing highway breezes.</p>
+          </div>
+        </div>
+
+        <!-- CARD 5: Lahar -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_lahar_upscaled.webp" alt="Lahar Lounge" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163246.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Reel Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 05</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Lahar Wave Lounge</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Sculptural undulating wave ceiling baffles, warm backlighting, and quiet intimate seating booths.</p>
+          </div>
+        </div>
+
+        <!-- CARD 6: Pargola -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_pargola_upscaled.webp" alt="Pargola Pavilion" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_1080p_20260928163137.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Reel Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 06</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Pargola Open Trellis</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Sun-drenched wooden pergola beams, hanging botanical greens, and open highway views.</p>
+          </div>
+        </div>
+
+        <!-- DUPLICATE SET FOR INFINITE SEAMLESS LOOP -->
+        <!-- CARD 1 DUPLICATE -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_basudha_upscaled.webp" alt="Basudha Hall" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163605.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg"><span class="w-2 h-2 rounded-full bg-white"></span><span>Live Reel Playing</span></div>
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 01</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Basudha Heritage</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Terracotta murals, thatched canopies, mustard floors, and wood-fired curries.</p>
+          </div>
+        </div>
+
+        <!-- CARD 2 DUPLICATE -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_chowringhee_upscaled.webp" alt="Chowringhee Hall" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163512.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg"><span class="w-2 h-2 rounded-full bg-white"></span><span>Live Reel Playing</span></div>
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 02</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Chowringhee 1920s</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Geometric black-and-white tessellated tiles, framed sepia archives, and Victorian arched glass.</p>
+          </div>
+        </div>
+
+        <!-- CARD 3 DUPLICATE -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_heart_of_the_world_upscaled.webp" alt="Hut of the World" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163413.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg"><span class="w-2 h-2 rounded-full bg-white"></span><span>Live Reel Playing</span></div>
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 03</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Hut of the World</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Curved paisley acoustic booths, suspended basket chandeliers, and 500+ guest grand banquet.</p>
+          </div>
+        </div>
+
+        <!-- CARD 4 DUPLICATE -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-[#B85D2A] shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/zone_card_bagicha_upscaled.webp" alt="Bagicha Garden" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/mothers_hut_real_motion_reel.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          <div class="reel-badge hidden absolute top-3 right-3 bg-red-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg"><span class="w-2 h-2 rounded-full bg-white"></span><span>Live Reel Playing</span></div>
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Zone 04</span>
+            <h4 class="font-samarkan text-2xl text-amber-200 mt-1 leading-tight">Bagicha Garden Deck</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Open-air tropical garden dining with twilight fairy lanterns and refreshing highway breezes.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Film Sprocket Border -->
+    <div class="film-sprocket-border mt-4"></div>
+  </section>
+
+  <!-- 7. 🎞️ "BANQUETS & MEGA FACILITIES" FILM STRIP CAROUSEL (REVERSE GLIDE + HOVER PLAY) -->
+  <section id="facilities" class="py-20 bg-[#171813] text-white border-b border-[#343825] overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 mb-8 flex flex-col md:flex-row md:items-end justify-between">
+      <div>
+        <span class="text-[#B85D2A] text-xs font-bold uppercase tracking-[0.2em] font-mono">Infrastructure Film Track</span>
+        <h3 class="font-samarkan text-3xl sm:text-5xl text-amber-200 mt-1">Banquets & Mega Facilities</h3>
+      </div>
+      <p class="text-stone-400 text-xs sm:text-sm max-w-md mt-2 md:mt-0 font-light flex items-center gap-2">
+        <i class="bi bi-camera-reels text-amber-400"></i>
+        <span>Hover over any facility to <strong>pause the roll</strong> and <strong>view motion preview</strong>.</span>
+      </p>
+    </div>
+
+    <!-- Top Film Sprocket Border -->
+    <div class="film-sprocket-border mb-4"></div>
+
+    <!-- Continuous Scrolling Reverse Film Strip Carousel Container -->
+    <div class="relative w-full overflow-hidden py-4">
+      <div class="film-strip-track film-strip-reverse flex gap-6 items-center">
+        
+        <!-- FACILITY 1: 800-Pax Banquet Ballroom -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/banquet_hall_seating_upscaled.webp" alt="800-Pax Banquet" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163413.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Tour Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Mega Ballroom</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">800-Pax Royal Banquet</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Centrally air-conditioned, pillarless luxury ballroom engineered for grand destination weddings.</p>
+          </div>
+        </div>
+
+        <!-- FACILITY 2: Illuminated Celebration Lawn -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/banquet_celebration_lawn_upscaled.webp" alt="Celebration Lawn" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_1080p_20260928163137.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Tour Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Open Sky Venue</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">Illuminated Lawn</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Landscaped courtyard with fairy canopies, hosting 1,200+ guests under open Nadia skies.</p>
+          </div>
+        </div>
+
+        <!-- FACILITY 3: 150+ Mothers Kitchen Brigade -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/kitchen_mothers_workforce_upscaled.webp" alt="150+ Mothers Kitchen" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/mothers_hut_real_motion_reel.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Tour Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Women Empowerment</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">150+ Mothers Kitchen</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Generational home recipes prepared in hygienic automated mega kadhais with hand-ground spices.</p>
+          </div>
+        </div>
+
+        <!-- FACILITY 4: 500+ Seater Mega Dining Hall -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/facility_interior_hero2_orig_upscaled.webp" alt="500+ Seater Hall" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163709.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Tour Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Highway Capacity</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">500+ Seater Dining Hall</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Rope-woven acoustic ceilings, warm chandeliers, and autonomous robot servers gliding between tables.</p>
+          </div>
+        </div>
+
+        <!-- FACILITY 5: 50,000 Sq.Ft. Campus Aerial -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/facility_interior_hero3_upscaled.webp" alt="Aerial Campus" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163709.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            <span>Live Tour Playing</span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">NH-12 Nadia</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">50,000 Sq.Ft. Complex</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Sprawling Krishnanagar campus featuring multi-bay parking, fueling plaza, and banquet grounds.</p>
+          </div>
+        </div>
+
+        <!-- DUPLICATE SET FOR INFINITE SEAMLESS LOOP -->
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/banquet_hall_seating_upscaled.webp" alt="800-Pax Banquet" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_in_1080p_20260928163413.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg"><span class="w-2 h-2 rounded-full bg-white"></span><span>Live Tour Playing</span></div>
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Mega Ballroom</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">800-Pax Royal Banquet</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Centrally air-conditioned, pillarless luxury ballroom engineered for grand destination weddings.</p>
+          </div>
+        </div>
+
+        <div class="film-card group relative w-80 sm:w-96 h-80 rounded-2xl overflow-hidden bg-[#222518] border-2 border-[#343825] hover:border-amber-400 shadow-xl flex-shrink-0 cursor-pointer transition-all duration-500 hover:scale-105">
+          <img src="assets/locations/upscaled/banquet_celebration_lawn_upscaled.webp" alt="Celebration Lawn" class="cover-img w-full h-full object-cover transition-opacity duration-300">
+          <video src="assets/locations/walkthrough/_camera_track_1080p_20260928163137.mp4" muted loop playsinline preload="none" class="hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-500"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent pointer-events-none"></div>
+          <div class="reel-badge hidden absolute top-3 right-3 bg-emerald-600/90 text-white text-[10px] font-mono px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur animate-pulse flex items-center gap-1.5 shadow-lg"><span class="w-2 h-2 rounded-full bg-white"></span><span>Live Tour Playing</span></div>
+          <div class="absolute bottom-4 left-4 right-4 pointer-events-none">
+            <span class="text-[10px] font-mono font-bold text-[#B85D2A] uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded">Open Sky Venue</span>
+            <h4 class="font-samarkan text-2xl text-white mt-1 leading-tight">Illuminated Lawn</h4>
+            <p class="text-xs text-stone-300 mt-1 line-clamp-2 font-light">Landscaped courtyard with fairy canopies, hosting 1,200+ guests under open Nadia skies.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Film Sprocket Border -->
+    <div class="film-sprocket-border mt-4"></div>
+  </section>
+
+  <!-- 8. 🗺️ INTERACTIVE MAP & NH-12 HIGHWAY LOCATION SECTION -->
+  <section id="map-section" class="py-20 max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+      <div>
+        <span class="text-[#B85D2A] text-xs font-bold uppercase tracking-[0.2em] font-mono">Highway Coordinates</span>
+        <h3 class="font-editorial text-3xl sm:text-5xl font-bold text-stone-900 mt-1">Location & Route Guide</h3>
+      </div>
+      <p class="text-stone-600 text-xs sm:text-sm max-w-md mt-2 md:mt-0 font-light">
+        Directly situated on National Highway 12, Krishnanagar, Nadia. Smooth highway access with expansive parking for 100+ cars and bus tours.
+      </p>
+    </div>
+
+    <!-- Map Container & Info Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white rounded-3xl p-4 sm:p-6 border border-stone-200/90 shadow-xl overflow-hidden">
+      
+      <!-- Interactive Leaflet Map (Left 8 Cols) -->
+      <div class="lg:col-span-8 rounded-2xl overflow-hidden relative border border-stone-200 min-h-[380px] sm:min-h-[440px]">
+        <div id="nh12-map" class="w-full h-full min-h-[380px] sm:min-h-[440px]"></div>
+        
+        <!-- Map Overlay Floating Badge -->
+        <div class="absolute top-4 left-4 z-[1000] bg-[#222518]/90 text-amber-200 px-3.5 py-1.5 rounded-full text-xs font-mono backdrop-blur border border-[#B85D2A]/40 shadow-lg">
+          <i class="bi bi-geo-alt-fill text-[#B85D2A]"></i> GPS: 23.4038° N, 88.5029° E
+        </div>
+      </div>
+
+      <!-- Right Route & Timing Information (Right 4 Cols) -->
+      <div class="lg:col-span-4 flex flex-col justify-between p-2 sm:p-4">
+        <div>
+          <h4 class="font-editorial text-2xl font-bold text-stone-900">Driving Distances</h4>
+          <p class="text-xs text-stone-500 mt-1">Convenient pitstop for highway travelers & day-trippers</p>
+
+          <div class="mt-6 space-y-3.5">
+            <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200/70 flex items-center justify-between">
+              <div>
+                <span class="font-bold text-xs text-stone-800 block">Kolkata (Airport)</span>
+                <span class="text-[11px] text-stone-500">via NH-12 4-Lane Express</span>
+              </div>
+              <div class="text-right">
+                <span class="font-mono font-bold text-xs text-[#B85D2A]">114 km</span>
+                <span class="text-[10px] text-stone-500 block">~2 hr 15 min</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200/70 flex items-center justify-between">
+              <div>
+                <span class="font-bold text-xs text-stone-800 block">Ranaghat Junction</span>
+                <span class="text-[11px] text-stone-500">via NH-12 Northbound</span>
+              </div>
+              <div class="text-right">
+                <span class="font-mono font-bold text-xs text-[#B85D2A]">32 km</span>
+                <span class="text-[10px] text-stone-500 block">~35 min</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200/70 flex items-center justify-between">
+              <div>
+                <span class="font-bold text-xs text-stone-800 block">Berhampore / Murshidabad</span>
+                <span class="text-[11px] text-stone-500">via NH-12 Southbound</span>
+              </div>
+              <div class="text-right">
+                <span class="font-mono font-bold text-xs text-[#B85D2A]">88 km</span>
+                <span class="text-[10px] text-stone-500 block">~1 hr 45 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-stone-200">
+          <a href="https://maps.google.com/?q=Mother's+Hut+Krishnanagar+NH-12" target="_blank" class="w-full py-3.5 px-4 rounded-xl bg-[#222518] hover:bg-stone-900 text-amber-200 font-bold text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2">
+            <i class="bi bi-compass-fill text-amber-400"></i>
+            <span>Open in Google Maps Navigation</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 9. 📝 GILDAS-STYLE VIP RESERVATION SECTION -->
+  <section id="reserve" class="py-20 bg-[#F5EFEB] border-t border-stone-300">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-12 shadow-xl border border-stone-200">
+        
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <span class="text-[#B85D2A] text-xs font-bold uppercase tracking-[0.2em] font-mono">Instant Confirmation</span>
+          <h3 class="font-samarkan text-3xl sm:text-5xl text-stone-900 mt-1">Reserve Your Table</h3>
+          <p class="text-xs sm:text-sm text-stone-600 mt-2 font-light">
+            Skip highway queues. We hold reserved tables 20 minutes past your requested arrival time.
+          </p>
+        </div>
+
+        <form onsubmit="handleReservation(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Your Full Name</label>
+            <input type="text" id="custName" required placeholder="e.g. Sourav Mukherjee" class="w-full px-4 py-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-[#B85D2A] focus:outline-none bg-stone-50">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">WhatsApp Number</label>
+            <input type="tel" id="custPhone" required placeholder="+91 98765 43210" class="w-full px-4 py-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-[#B85D2A] focus:outline-none bg-stone-50">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Preferred Dining World</label>
+            <select id="custZone" class="w-full px-4 py-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-[#B85D2A] focus:outline-none bg-stone-50">
+              <option value="Basudha (Rural Heritage)">Basudha (Rural Heritage & Mustard Floor)</option>
+              <option value="Chowringhee (Colonial Calcutta)">Chowringhee (1920s Colonial Calcutta)</option>
+              <option value="Hut of the World (Banquet)">Hut of the World (Grand Banquet)</option>
+              <option value="Bagicha (Garden Pavilion)">Bagicha (Verdant Garden Deck)</option>
+              <option value="Lahar (Modern Wave Lounge)">Lahar (Acoustic Wave Lounge)</option>
+              <option value="Pargola (Open Trellis)">Pargola (Open Trellis Deck)</option>
+              <option value="800-Pax Mega Royal Banquet">800-Pax Mega Royal Banquet</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Date & Estimated Arrival</label>
+            <input type="datetime-local" id="custTime" required class="w-full px-4 py-3 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-[#B85D2A] focus:outline-none bg-stone-50">
+          </div>
+
+          <div class="sm:col-span-2 mt-4">
+            <button type="submit" class="w-full py-4 rounded-full bg-gradient-to-r from-[#B85D2A] to-[#8C3B1B] text-white font-bold text-xs uppercase tracking-widest shadow-xl hover:brightness-110 transition flex items-center justify-center gap-2">
+              <i class="bi bi-whatsapp text-emerald-400 text-base"></i>
+              <span>Confirm Table via Instant WhatsApp Notification</span>
+            </button>
+            <p class="text-[11px] text-center text-stone-400 mt-2">Zero booking fees. No pre-payment required.</p>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. 🦶 GILDAS-STYLE FOOTER -->
+  <footer class="bg-[#171813] text-stone-400 text-xs py-16 border-t border-[#343825]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-stone-800">
+        
+        <div class="md:col-span-2">
+          <h4 class="font-samarkan text-3xl text-amber-200">Mother's Hut</h4>
+          <p class="text-stone-400 text-xs max-w-sm mt-3 leading-relaxed font-light">
+            NH-12, Krishnanagar Bypass, Nadia, West Bengal 741101.<br>
+            A 100% women-run gastronomic landmark serving authentic Bengali cuisine since 2013.
+          </p>
+          <div class="mt-4 flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            <span class="text-emerald-300 font-mono text-[11px]">Autonomous Robot Service Active</span>
+          </div>
+        </div>
+
+        <div>
+          <h5 class="text-white font-bold uppercase tracking-widest text-[11px] mb-3">Operating Hours</h5>
+          <p class="leading-relaxed">
+            Monday — Sunday<br>
+            <strong class="text-white">7:00 AM — 11:30 PM</strong><br>
+            Open 365 Days a Year<br>
+            (Breakfast, Lunch, Hi-Tea, Dinner)
+          </p>
+        </div>
+
+        <div>
+          <h5 class="text-white font-bold uppercase tracking-widest text-[11px] mb-3">Direct Contact</h5>
+          <p class="leading-relaxed">
+            Reservations: <a href="tel:+919876543210" class="text-amber-200 hover:underline">+91 98765 43210</a><br>
+            Banquets: <a href="tel:+919876543211" class="text-amber-200 hover:underline">+91 98765 43211</a><br>
+            Email: <span class="text-stone-300">welcome@mothershut.com</span>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-500">
+        <p>© 2026 Mother's Hut Krishnanagar. Powered by 150+ Mothers.</p>
+        <p class="mt-2 sm:mt-0 font-mono">Designed with Gildas Hospitality Aesthetic</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 🤖 11. ANANYA AI ASSISTANT AGENT (LAUNCHER & DRAWER) -->
+  <div id="ai-assistant-container" class="fixed bottom-6 right-6 z-50">
+    
+    <!-- Collapsed Floating Launcher Button -->
+    <button id="ai-launcher-btn" onclick="toggleAnanyaAI()" class="ananya-pill-btn px-5 py-3 flex items-center gap-3 text-white cursor-pointer">
+      <span class="relative flex h-3.5 w-3.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-cyan-500"></span>
+      </span>
+      <span class="font-samarkan text-lg text-amber-200">Ananya AI</span>
+      <span class="text-[10px] font-mono text-stone-300 hidden sm:inline">Concierge</span>
+    </button>
+
+    <!-- Expanded AI Chatbot Modal / Drawer -->
+    <div id="ai-chat-window" class="hidden absolute bottom-16 right-0 w-[340px] sm:w-[390px] bg-[#171813] border-2 border-[#B85D2A] rounded-3xl shadow-2xl overflow-hidden flex flex-col text-[#F5EFEB] transition-all duration-300">
+      
+      <!-- AI Header -->
+      <div class="p-4 bg-[#222518] border-b border-[#343825] flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center">
+            <i class="bi bi-robot text-cyan-300 text-lg"></i>
+          </div>
+          <div>
+            <h4 class="font-samarkan text-xl text-amber-200 leading-tight">Ananya AI Concierge</h4>
+            <span class="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Online • Mother's Hut NH-12
+            </span>
+          </div>
+        </div>
+        <button onclick="toggleAnanyaAI()" class="text-stone-400 hover:text-white text-lg">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Quick Prompt Pills -->
+      <div class="p-3 bg-[#1C1E14] border-b border-[#343825] flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="sendQuickPrompt('What are your famous dishes?')" class="px-2.5 py-1 rounded-full bg-[#343825] hover:bg-[#B85D2A] text-stone-200 hover:text-white transition whitespace-nowrap">🍲 Famous Dishes</button>
+        <button onclick="sendQuickPrompt('Which zone should I book?')" class="px-2.5 py-1 rounded-full bg-[#343825] hover:bg-[#B85D2A] text-stone-200 hover:text-white transition whitespace-nowrap">🏛️ 10 Zones</button>
+        <button onclick="sendQuickPrompt('How do I reach from Kolkata?')" class="px-2.5 py-1 rounded-full bg-[#343825] hover:bg-[#B85D2A] text-stone-200 hover:text-white transition whitespace-nowrap">🚗 Route & Map</button>
+        <button onclick="sendQuickPrompt('Tell me about 150 mothers')" class="px-2.5 py-1 rounded-full bg-[#343825] hover:bg-[#B85D2A] text-stone-200 hover:text-white transition whitespace-nowrap">👩‍🍳 The Mothers</button>
+      </div>
+
+      <!-- Chat History Stream -->
+      <div id="ai-chat-messages" class="p-4 h-72 overflow-y-auto space-y-3.5 text-xs font-light leading-relaxed">
+        <div class="flex items-start gap-2.5">
+          <div class="w-6 h-6 rounded-full bg-cyan-900 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <i class="bi bi-robot text-cyan-300 text-xs"></i>
+          </div>
+          <div class="bg-[#222518] p-3 rounded-2xl rounded-tl-none border border-[#343825] text-stone-200">
+            Nomoshkar! I am <strong>Ananya</strong>, Mother's Hut's autonomous AI dining concierge. How may I assist your NH-12 journey today? Ask me about our 150+ mothers, authentic dishes, table reservations, or travel directions!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <form onsubmit="handleAIChatSubmit(event)" class="p-3 bg-[#222518] border-t border-[#343825] flex items-center gap-2">
+        <input type="text" id="ai-chat-input" placeholder="Ask Ananya anything..." class="flex-1 bg-[#171813] border border-stone-700 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-[#B85D2A]">
+        <button type="submit" class="w-8 h-8 rounded-full bg-[#B85D2A] hover:bg-[#8C3B1B] text-white flex items-center justify-center transition">
+          <i class="bi bi-send-fill text-xs"></i>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- 12. POPUP MODALS FOR QUICK ACTIONS -->
+  <!-- Menu Modal -->
+  <div id="menu-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 max-h-[85vh] overflow-y-auto relative">
+      <button onclick="closeModal('menu-modal')" class="absolute top-5 right-5 text-stone-400 hover:text-stone-800 text-xl">
+        <i class="bi bi-x-circle-fill"></i>
+      </button>
+      <div class="text-center mb-6">
+        <span class="text-[#B85D2A] text-xs font-bold uppercase tracking-widest font-mono">Handcrafted Generational Recipes</span>
+        <h3 class="font-samarkan text-3xl text-stone-900 mt-1">Authentic Mother's Hut Menu</h3>
+      </div>
+      <div class="space-y-4 text-xs text-stone-700">
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex justify-between items-center">
+          <div>
+            <h5 class="font-bold text-sm text-stone-900">Slow-Cooked Nadia Mutton Kasha</h5>
+            <p class="text-stone-500">Tender mutton simmered in wood-fired kadhai with mustard oil</p>
+          </div>
+          <span class="font-bold text-stone-900 text-sm">₹380</span>
+        </div>
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex justify-between items-center">
+          <div>
+            <h5 class="font-bold text-sm text-stone-900">Authentic Ilish Bhapa / Shorshe</h5>
+            <p class="text-stone-500">Steamed Padma hilsa in stone-ground yellow and black mustard</p>
+          </div>
+          <span class="font-bold text-stone-900 text-sm">₹490</span>
+        </div>
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex justify-between items-center">
+          <div>
+            <h5 class="font-bold text-sm text-stone-900">Grand Mother's Thali</h5>
+            <p class="text-stone-500">Govindobhog rice, ghee, shukto, dal, 3 fries, choice of fish/mutton, chutney, mishti</p>
+          </div>
+          <span class="font-bold text-stone-900 text-sm">₹520</span>
+        </div>
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex justify-between items-center">
+          <div>
+            <h5 class="font-bold text-sm text-stone-900">Artisanal Krishnanagar Sarpuria & Langcha</h5>
+            <p class="text-stone-500">Traditional layered cream sweet handcrafted fresh daily</p>
+          </div>
+          <span class="font-bold text-stone-900 text-sm">₹120</span>
+        </div>
+      </div>
+      <div class="mt-6 text-center">
+        <a href="#reserve" onclick="closeModal('menu-modal')" class="px-6 py-3 rounded-full bg-[#B85D2A] text-white font-bold text-xs uppercase tracking-wider inline-block">Order & Reserve Table</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waitlist Modal -->
+  <div id="waitlist-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 relative">
+      <button onclick="closeModal('waitlist-modal')" class="absolute top-5 right-5 text-stone-400 hover:text-stone-800 text-xl">
+        <i class="bi bi-x-circle-fill"></i>
+      </button>
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3">
+          <i class="bi bi-ticket-perforated-fill text-2xl"></i>
+        </div>
+        <h3 class="font-samarkan text-3xl text-stone-900">Live Highway Waitlist</h3>
+        <p class="text-xs text-stone-500 mt-1">Get an instant digital token while driving on NH-12</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200 mb-5 text-center">
+        <span class="text-xs text-stone-500 block">Current Average Wait Time</span>
+        <span class="text-3xl font-bold text-[#B85D2A] block my-1">8 Mins</span>
+        <span class="text-[11px] text-emerald-600 font-medium">10 Dining Zones Active</span>
+      </div>
+      <form onsubmit="handleTokenSubmit(event)" class="space-y-3">
+        <input type="text" id="waitlistName" required placeholder="Your Name" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-xs">
+        <input type="tel" id="waitlistPhone" required placeholder="Phone Number" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-xs">
+        <select id="waitlistGuests" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-xs">
+          <option>2 Guests</option>
+          <option>3 - 5 Guests</option>
+          <option>6 - 10 Guests</option>
+          <option>10+ Large Family</option>
+        </select>
+        <button type="submit" class="w-full py-3.5 rounded-full bg-[#B85D2A] text-white font-bold text-xs uppercase tracking-wider shadow">Get Live Digital Token</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Events Modal -->
+  <div id="events-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 relative">
+      <button onclick="closeModal('events-modal')" class="absolute top-5 right-5 text-stone-400 hover:text-stone-800 text-xl">
+        <i class="bi bi-x-circle-fill"></i>
+      </button>
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3">
+          <i class="bi bi-calendar-event-fill text-2xl"></i>
+        </div>
+        <h3 class="font-samarkan text-3xl text-stone-900">Official MH Shows</h3>
+        <p class="text-xs text-stone-500 mt-1">Live Baul music, Bengali cultural evenings & food festivals</p>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200">
+          <span class="text-[10px] font-bold text-[#B85D2A] uppercase font-mono">Upcoming Saturday • 6:30 PM</span>
+          <h5 class="font-bold text-stone-900 text-sm mt-0.5">Nadia Folk Baul Sangeet Evening</h5>
+          <p class="text-stone-600 mt-1">Performed in Bagicha Garden Pavilion alongside live hot jalebi counters.</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
+          <span class="text-[10px] font-bold text-stone-500 uppercase font-mono">Every Sunday • 1:00 PM</span>
+          <h5 class="font-bold text-stone-900 text-sm mt-0.5">Mother's Royal Sunday Feast</h5>
+          <p class="text-stone-600 mt-1">12-course traditional feast in Hut of the World Ballroom.</p>
+        </div>
+      </div>
+      <div class="mt-5 text-center">
+        <a href="#reserve" onclick="closeModal('events-modal')" class="px-6 py-3 rounded-full bg-[#222518] text-amber-200 font-bold text-xs uppercase tracking-wider inline-block">Book Seats for Next Show</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    /* ==========================================================================
+       🗺️ 1. LEAFLET INTERACTIVE MAP INITIALIZATION (NH-12 KRISHNANAGAR)
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      const lat = 23.4038;
+      const lng = 88.5029;
+      
+      const map = L.map('nh12-map', {
+        center: [lat, lng],
+        zoom: 14,
+        zoomControl: true,
+        scrollWheelZoom: false
+      });
+
+      // Clean OpenStreetMap tiles without watermark
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      // Custom Heritage Gold/Terracotta Marker
+      const customIcon = L.divIcon({
+        className: 'custom-map-pin',
+        html: `<div style="background-color: #B85D2A; width: 34px; height: 34px; border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; items-center; justify-content: center; color: #FFF; font-size: 16px;"><i class="bi bi-geo-alt-fill" style="margin-top: 4px; margin-left: 7px;"></i></div>`,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17]
+      });
+
+      const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+      marker.bindPopup(`
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 170px;">
+          <h4 style="font-family: 'Samarkan', serif; font-size: 18px; color: #F5EFEB; margin-bottom: 3px;">Mother's Hut</h4>
+          <p style="font-size: 11px; color: #ECE5CE; margin: 0;">NH-12 Krishnanagar Bypass, Nadia</p>
+          <p style="font-size: 10px; color: #B85D2A; font-weight: bold; margin-top: 5px;">★ 50,000 Sq.Ft. Campus</p>
+        </div>
+      `).openPopup();
+
+      initFilmStripReelHover();
+    });
+
+    /* ==========================================================================
+       🎥 2. WALKTHROUGH: AUTOPLAY + SCROLL SCRUB & 5 PURE NAMES
+       ========================================================================== */
+    gsap.registerPlugin(ScrollTrigger);
+
+    const trackVideo = document.getElementById('trackVideo');
+    let videoDuration = 30.0;
+    let targetVideoTime = 0;
+    let isAutoplayActive = false;
+    let autoplayInterval = null;
+
+    trackVideo.addEventListener('loadedmetadata', () => {
+      if (trackVideo.duration && !isNaN(trackVideo.duration)) {
+        videoDuration = trackVideo.duration;
+      }
+    });
+
+    // 5 Stages matching user request exactly:
+    // 1: "mother's hut", 2: "chowringhee", 3: "Basudha", 4: "Hut of the world", 5: "Pargola"
+    const stages = [
+      { id: 'name-stage-1', start: 0.00, end: 0.20 },
+      { id: 'name-stage-2', start: 0.20, end: 0.40 },
+      { id: 'name-stage-3', start: 0.40, end: 0.60 },
+      { id: 'name-stage-4', start: 0.60, end: 0.80 },
+      { id: 'name-stage-5', start: 0.80, end: 1.00 }
+    ];
+
+    function updateHeroName(progress) {
+      stages.forEach((st) => {
+        const el = document.getElementById(st.id);
+        if (!el) return;
+        const isActive = progress >= st.start && progress <= st.end;
+
+        if (isActive) {
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
+          el.style.pointerEvents = 'auto';
+          el.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        } else {
+          el.style.opacity = '0';
+          el.style.visibility = 'hidden';
+          el.style.pointerEvents = 'none';
+          el.style.transform = progress < st.start 
+            ? 'translate3d(0, 30px, 0) scale(0.95)' 
+            : 'translate3d(0, -30px, 0) scale(0.95)';
+        }
+      });
+    }
+
+    // ScrollTrigger Pinned Scrub
+    const heroScrollTrigger = ScrollTrigger.create({
+      trigger: '#scroll-track-runway',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.2,
+      onUpdate: (self) => {
+        if (!isAutoplayActive) {
+          const p = Math.max(0, Math.min(1, self.progress));
+          targetVideoTime = p * Math.max(0, videoDuration - 0.1);
+          updateHeroName(p);
+        }
+      }
+    });
+
+    // Smooth seek loop for scrubbing
+    function smoothVideoLoop() {
+      if (!isAutoplayActive && trackVideo.readyState >= 2) {
+        const diff = targetVideoTime - trackVideo.currentTime;
+        if (Math.abs(diff) > 0.02) {
+          trackVideo.currentTime += diff * 0.35;
+        }
+      }
+      requestAnimationFrame(smoothVideoLoop);
+    }
+    requestAnimationFrame(smoothVideoLoop);
+
+    // AUTOPLAY WALKTHROUGH CONTROLLER
+    function toggleWalkthroughAutoplay() {
+      isAutoplayActive = !isAutoplayActive;
+      const btn = document.getElementById('autoplay-toggle-btn');
+      const icon = document.getElementById('autoplay-icon');
+      const label = document.getElementById('autoplay-label');
+      const ping = document.getElementById('autoplay-ping');
+      const dot = document.getElementById('autoplay-dot');
+
+      if (isAutoplayActive) {
+        trackVideo.currentTime = 0;
+        trackVideo.play().catch(() => {});
+        icon.className = 'bi bi-pause-fill text-amber-400 text-lg';
+        label.innerText = 'Pause Walkthrough';
+        label.className = 'text-xs font-mono font-bold tracking-wider text-amber-300 uppercase';
+        btn.classList.add('border-amber-400');
+        ping.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75';
+        dot.className = 'relative inline-flex rounded-full h-3 w-3 bg-amber-500';
+
+        // Listen for continuous time updates to cycle the 5 names
+        trackVideo.ontimeupdate = () => {
+          if (isAutoplayActive && videoDuration > 0) {
+            const p = trackVideo.currentTime / videoDuration;
+            updateHeroName(p);
+            if (trackVideo.currentTime >= videoDuration - 0.2) {
+              trackVideo.currentTime = 0;
+              trackVideo.play().catch(() => {});
+            }
+          }
+        };
+      } else {
+        trackVideo.pause();
+        trackVideo.ontimeupdate = null;
+        icon.className = 'bi bi-play-fill text-emerald-400 text-lg';
+        label.innerText = 'Autoplay Walkthrough';
+        label.className = 'text-xs font-mono font-bold tracking-wider text-emerald-200 uppercase';
+        btn.classList.remove('border-amber-400');
+        ping.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+        dot.className = 'relative inline-flex rounded-full h-3 w-3 bg-emerald-500';
+      }
+    }
+
+    /* ==========================================================================
+       🎞️ 3. FILM STRIP HOVER REEL & SLIDESHOW CONTROLLER
+       ========================================================================== */
+    function initFilmStripReelHover() {
+      const cards = document.querySelectorAll('.film-card');
+      cards.forEach((card) => {
+        const video = card.querySelector('video');
+        const badge = card.querySelector('.reel-badge');
+
+        card.addEventListener('mouseenter', () => {
+          if (video) {
+            video.classList.remove('hidden');
+            video.currentTime = 0;
+            video.play().catch(() => {});
+          }
+          if (badge) badge.classList.remove('hidden');
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (video) {
+            video.pause();
+            video.classList.add('hidden');
+          }
+          if (badge) badge.classList.add('hidden');
+        });
+      });
+    }
+
+    /* ==========================================================================
+       🤖 4. ANANYA AI ASSISTANT CONCIERGE AGENT LOGIC
+       ========================================================================== */
+    function toggleAnanyaAI() {
+      const win = document.getElementById('ai-chat-window');
+      win.classList.toggle('hidden');
+    }
+
+    const aiKnowledge = {
+      dishes: "Our signature culinary highlights include: Slow-Cooked Nadia Mutton Kasha (simmered in mustard oil and wood-fire kadhai), Steamed Ilish Bhapa with stone-ground mustard, Golda Chingri Malai Curry, authentic Bengali Shukto, and hot Sarpuria & Langcha sweets crafted fresh daily!",
+      zones: "Mother's Hut features 10 themed dining worlds! Highlights include: 01 Basudha (Rural terracotta & mustard floor), 02 Chowringhee (1920s Colonial Calcutta tiled hall), 03 Hut of the World (500+ pax grand banquet), 04 Bagicha (Lush garden open dining), 05 Lahar (Acoustic wave lounge), and 06 Pargola (Open timber trellis deck).",
+      route: "We are situated directly on NH-12 Krishnanagar Bypass, Nadia (GPS: 23.4038° N, 88.5029° E). It is a smooth ~2h 15m drive (114 km) from Kolkata Airport via the newly upgraded 4-lane expressway with dedicated parking for 100+ cars!",
+      mothers: "Mother's Hut is 100% women-run! Over 150 local mothers from Nadia manage and cook in our state-of-the-art mega kitchen. Every recipe is passed down through generations, with 0% artificial colors and 100% hand-ground natural spices.",
+      banquet: "Our 800-pax air-conditioned royal ballroom and 1,200-pax illuminated celebration lawn host destination weddings, anniversaries, and corporate events with full catering by our women culinary brigade. Click 'Banquet' or WhatsApp us to get custom event packages!"
+    };
+
+    function sendQuickPrompt(promptText) {
+      appendChatMessage(promptText, 'user');
+      setTimeout(() => {
+        let answer = "";
+        const lower = promptText.toLowerCase();
+        if (lower.includes('dish') || lower.includes('menu')) answer = aiKnowledge.dishes;
+        else if (lower.includes('zone') || lower.includes('book')) answer = aiKnowledge.zones;
+        else if (lower.includes('reach') || lower.includes('kolkata') || lower.includes('route')) answer = aiKnowledge.route;
+        else if (lower.includes('mother') || lower.includes('women')) answer = aiKnowledge.mothers;
+        else answer = "I would love to help you plan your visit to Mother's Hut! Feel free to ask about our dishes, dining halls, banquets, or table reservations.";
+        appendChatMessage(answer, 'bot');
+      }, 400);
+    }
+
+    function handleAIChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('ai-chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      appendChatMessage(text, 'user');
+      input.value = '';
+
+      setTimeout(() => {
+        let answer = "";
+        const lower = text.toLowerCase();
+        if (lower.includes('dish') || lower.includes('food') || lower.includes('mutton') || lower.includes('ilish')) {
+          answer = aiKnowledge.dishes;
+        } else if (lower.includes('zone') || lower.includes('hall') || lower.includes('seat')) {
+          answer = aiKnowledge.zones;
+        } else if (lower.includes('route') || lower.includes('map') || lower.includes('location') || lower.includes('distance') || lower.includes('kolkata')) {
+          answer = aiKnowledge.route;
+        } else if (lower.includes('mother') || lower.includes('women') || lower.includes('who')) {
+          answer = aiKnowledge.mothers;
+        } else if (lower.includes('banquet') || lower.includes('wedding') || lower.includes('event')) {
+          answer = aiKnowledge.banquet;
+        } else if (lower.includes('reserve') || lower.includes('table') || lower.includes('book')) {
+          answer = "You can instantly reserve your preferred hall directly below or via WhatsApp (+91 98765 43210). Would you like me to open the reservation form for you?";
+        } else {
+          answer = `Nomoshkar! At Mother's Hut Krishnanagar on NH-12, our 150+ mothers prepare authentic Bengali delicacies across 10 themed dining worlds. Feel free to explore our Full Menu, join the live waitlist, or let me assist your table booking!`;
+        }
+        appendChatMessage(answer, 'bot');
+      }, 500);
+    }
+
+    function appendChatMessage(msg, sender) {
+      const container = document.getElementById('ai-chat-messages');
+      const div = document.createElement('div');
+      div.className = sender === 'user' ? 'flex justify-end' : 'flex items-start gap-2.5';
+      
+      if (sender === 'user') {
+        div.innerHTML = `<div class="bg-[#B85D2A] text-white p-2.5 px-3.5 rounded-2xl rounded-tr-none text-xs max-w-[85%]">${msg}</div>`;
+      } else {
+        div.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-cyan-900 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <i class="bi bi-robot text-cyan-300 text-xs"></i>
+          </div>
+          <div class="bg-[#222518] p-3 rounded-2xl rounded-tl-none border border-[#343825] text-stone-200 text-xs max-w-[85%]">
+            ${msg}
+          </div>
+        `;
+      }
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    /* ==========================================================================
+       🎟️ 5. MODAL HELPERS & RESERVATION HANDLER
+       ========================================================================== */
+    function openMenuModal() { document.getElementById('menu-modal').classList.remove('hidden'); document.getElementById('menu-modal').classList.add('flex'); }
+    function openWaitlistModal() { document.getElementById('waitlist-modal').classList.remove('hidden'); document.getElementById('waitlist-modal').classList.add('flex'); }
+    function openEventsModal() { document.getElementById('events-modal').classList.remove('hidden'); document.getElementById('events-modal').classList.add('flex'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+
+    function handleTokenSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('waitlistName').value;
+      const guests = document.getElementById('waitlistGuests').value;
+      alert(`Token #MH-${Math.floor(100 + Math.random() * 900)} Confirmed for ${name} (${guests})! Please show this upon NH-12 arrival.`);
+      closeModal('waitlist-modal');
+    }
+
+    function handleReservation(e) {
+      e.preventDefault();
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const zone = document.getElementById('custZone').value;
+      const time = document.getElementById('custTime').value;
+
+      const message = `Hello Mother's Hut! I would like to reserve a table.%0A%0A*Name:* ${name}%0A*Phone:* ${phone}%0A*Zone:* ${zone}%0A*Date/Time:* ${time}`;
+      window.open(`https://wa.me/919876543210?text=${message}`, '_blank');
+    }
+  </script>
+</body>
+</html>
