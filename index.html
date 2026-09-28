@@ -156,9 +156,11 @@
         <video id="trackVideo" 
                src="assets/locations/walkthrough/hero_walkthrough_upscaled.mp4" 
                muted 
+               autoplay
+               loop
                playsinline 
                preload="auto" 
-               poster="assets/authentic_basudha_hall.jpg"
+               poster="assets/hero_poster.webp"
                class="absolute inset-0 w-full h-full object-cover z-0 filter contrast-[1.05] brightness-95 will-change-transform"></video>
 
         <!-- Pure Typography Layer: ONLY THE 5 NAMES IN SAMARKAN FONT (No extra text, no badges, no overlays) -->
@@ -1159,6 +1161,22 @@
         dot.className = 'relative inline-flex rounded-full h-3 w-3 bg-emerald-500';
       }
     }
+
+    // Auto-engage walkthrough autoplay when page loads
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!isAutoplayActive && window.scrollY < 100) {
+          toggleWalkthroughAutoplay();
+        }
+      }, 350);
+    });
+
+    // If user starts scrolling down significantly, switch seamlessly to manual scroll scrub
+    window.addEventListener('scroll', () => {
+      if (isAutoplayActive && window.scrollY > 120) {
+        toggleWalkthroughAutoplay();
+      }
+    }, { passive: true });
 
     /* ==========================================================================
        🎞️ 3. FILM STRIP HOVER REEL & SLIDESHOW CONTROLLER
